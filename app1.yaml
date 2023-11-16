@@ -1,0 +1,41 @@
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: app-1-service
+spec:
+  selector:
+    app: app-1
+  ports:
+  - port: 80
+    name: http
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-1-deployment
+spec:
+  selector:
+    matchLabels:
+      app: app-1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: app-1
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.15.12-alpine
+        env:   # to import one key from configmap object
+          - name: playerName      # key name inside pods
+            valueFrom:
+              configMapKeyRef:
+                name: game-cm
+                key: player # key name in configmap
+            
+        envFrom: # to import all key from secret obk=ject
+          - secretRef:
+              name: secret-opaque
+        ports:
+        - containerPort: 80

@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: game-cm
+data:
+  player: dhoni
+  myconfig.yaml: |
+    game:
+      name: cricket
