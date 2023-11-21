@@ -24,9 +24,13 @@ spec:
       labels:
         app: app-1
     spec:
+      serviceAccountName: get-secret-sa
       containers:
-      - name: nginx
-        image: nginx:1.15.12-alpine
+      - name: app-1
+        image: alpine:latest
+        command: ["/bin/sh", "-c"]
+        args:
+        - "while true; do sleep 3600; done"
         env:   # to import one key from configmap object
           - name: playerName      # key name inside pods
             valueFrom:
@@ -39,3 +43,14 @@ spec:
               name: secret-opaque
         ports:
         - containerPort: 80
+        volumeMounts:
+        - name: secrets-store-inline
+          mountPath: "/my-secrets/secrets-store"
+          readOnly: true
+      volumes:
+      - name: secrets-store-inline
+        csi:
+          driver: secrets-store.csi.k8s.io
+          readOnly: true
+          volumeAttributes:
+            secretProviderClass: "app-1-aws-secrets-provider"
