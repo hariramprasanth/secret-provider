@@ -16,8 +16,8 @@ https://github.com/aws/secrets-store-csi-driver-provider-aws
 ## SecretManager Access
 1. create oidc provider for the cluster
 2. create a iam role with ssm read policy (truted entiy as oidc with service account name and namespace)
+3. Create service account with annotation - eks.amazonaws.com/role-arn:
  Note: Same flow as POD Identity management
-
 ## Secret provider class
 https://github.com/aws/secrets-store-csi-driver-provider-aws/tree/main/examples
 
